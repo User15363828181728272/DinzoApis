@@ -194,7 +194,7 @@
                 </div>
                 <span class="text-sm font-bold tracking-tight">Dinzo <span class="text-gray-400 font-medium">Apis.</span></span>
             </div>
-            <p class="text-gray-400 text-[11px] font-medium tracking-wide">© <span id="year"></span> Dinzo Apis</p>
+            <p class="text-gray-400 text-[11px] font-medium tracking-wide">© <span id="year"></span> DINZO NETWORK. ALL RIGHTS RESERVED.</p>
         </footer>
     </main>
 
@@ -225,7 +225,8 @@
             if (!btn || !rawStorage[key]) return;
             const original = btn.innerHTML;
             try {
-                const textToCopy = typeof rawStorage[key] === 'object' ? JSON.stringify(rawStorage[key], null, 2) : rawStorage[key];
+                let textToCopy = rawStorage[key];
+                if (typeof textToCopy === 'object') textToCopy = JSON.stringify(textToCopy, null, 2);
                 await navigator.clipboard.writeText(textToCopy);
                 btn.innerHTML = '<i class="material-icons text-lg text-green-500">done</i>';
                 setTimeout(() => btn.innerHTML = original, 2000);
@@ -237,9 +238,17 @@
 
         function openRawWindow(key) {
             if (!rawStorage[key]) return;
-            const data = typeof rawStorage[key] === 'object' ? JSON.stringify(rawStorage[key], null, 2) : rawStorage[key];
+            let data = rawStorage[key];
+            if (typeof data === 'object') data = JSON.stringify(data, null, 2);
+            
+            const isImageUrl = typeof data === 'string' && data.startsWith('blob:');
             const newWindow = window.open();
-            newWindow.document.write('<pre style="word-wrap: break-word; white-space: pre-wrap;">' + data + '</pre>');
+            
+            if (isImageUrl) {
+                newWindow.document.write(`<html><body style="margin:0;display:flex;justify-content:center;align-items:center;background:#000;"><img src="${data}"></body></html>`);
+            } else {
+                newWindow.document.write(`<html><body style="margin:0;"><pre style="word-wrap: break-word; white-space: pre-wrap; padding: 20px; font-family: monospace;">${data.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre></body></html>`);
+            }
             newWindow.document.close();
         }
 
@@ -286,7 +295,7 @@
                     unreadBadge.classList.remove('hidden');
                 }
             } catch (e) {
-                listEl.innerHTML = '<p class="text-[10px] text-gray-400 uppercase">Haloo selamat datang dan selamat menggunakan</p>';
+                listEl.innerHTML = '<p class="text-[10px] text-gray-400 uppercase">Bulletin unavailable</p>';
             }
         }
 
@@ -325,21 +334,21 @@
                     const blob = await response.blob();
                     const imgUrl = URL.createObjectURL(blob);
                     rawStorage[storageKey] = imgUrl; 
-                    
                     bodyHtml = `
                         <div class="p-4 bg-white flex justify-center border-b border-gray-100">
                             <img src="${imgUrl}" class="max-w-full rounded-lg shadow-sm border border-gray-100">
                         </div>
-                        <div class="p-4 bg-gray-50 border-t border-gray-100 text-[10px] text-gray-400 font-mono italic text-center">Image response rendered above.</div>
                     `;
-                } else if (contentType.includes('application/json')) {
-                    const data = await response.json();
-                    rawStorage[storageKey] = data;
-                    bodyHtml = `<pre class="p-4 bg-gray-50 overflow-auto max-h-[400px]"><code class="language-json text-[11px]">${JSON.stringify(data, null, 2)}</code></pre>`;
                 } else {
                     const text = await response.text();
-                    rawStorage[storageKey] = text;
-                    bodyHtml = `<pre class="p-4 bg-gray-50 text-[11px] overflow-auto">${text}</pre>`;
+                    try {
+                        const json = JSON.parse(text);
+                        rawStorage[storageKey] = json;
+                        bodyHtml = `<pre class="p-4 bg-gray-50 overflow-auto max-h-[400px]"><code class="language-json text-[11px]">${JSON.stringify(json, null, 2)}</code></pre>`;
+                    } catch (e) {
+                        rawStorage[storageKey] = text;
+                        bodyHtml = `<pre class="p-4 bg-gray-50 text-[11px] overflow-auto">${text}</pre>`;
+                    }
                 }
 
                 resContent.innerHTML = `
@@ -355,10 +364,10 @@
                             </div>
                         </div>
                         <div class="flex gap-2">
-                            <button onclick="openRawWindow('${storageKey}')" title="Open Raw" class="p-2 hover:bg-gray-50 rounded-lg transition-colors">
+                            <button onclick="openRawWindow('${storageKey}')" class="p-2 hover:bg-gray-50 rounded-lg transition-colors">
                                 <i class="material-icons text-lg text-gray-400">open_in_new</i>
                             </button>
-                            <button onclick="copyToClipboard('${storageKey}', this)" title="Copy Raw" class="p-2 hover:bg-gray-50 rounded-lg transition-colors">
+                            <button onclick="copyToClipboard('${storageKey}', this)" class="p-2 hover:bg-gray-50 rounded-lg transition-colors">
                                 <i class="material-icons text-lg text-gray-400">content_copy</i>
                             </button>
                         </div>
@@ -377,9 +386,7 @@
                 const response = await fetch('/src/openapi.json');
                 const data = await response.json();
                 const categories = {};
-
                 if (data.tags) data.tags.forEach(t => categories[t.name] = { name: t.name, items: [] });
-
                 Object.keys(data.paths).forEach(path => {
                     Object.keys(data.paths[path]).forEach(method => {
                         const ep = data.paths[path][method];
@@ -404,16 +411,13 @@
                             </button>
                             <div id="cat-body-${cIdx}" class="space-y-4">
                     `;
-
                     cat.items.forEach((item, eIdx) => {
                         const m = item.method.toUpperCase();
                         const colorMap = { GET: 'bg-blue-50 text-blue-600', POST: 'bg-green-50 text-green-600', DELETE: 'bg-red-50 text-red-600', PUT: 'bg-orange-50 text-orange-600' };
-                        const color = colorMap[m] || 'bg-gray-50 text-gray-600';
-
                         html += `
                             <div class="api-item bg-white border border-gray-100 rounded-2xl overflow-hidden card-shadow" data-path="${item.path}" data-name="${item.summary}">
                                 <button onclick="toggleEndpoint(${cIdx}, ${eIdx})" class="w-full px-6 py-5 text-left flex items-center gap-4 endpoint-btn hover:bg-gray-50/50">
-                                    <span class="method-badge ${color}">${m}</span>
+                                    <span class="method-badge ${colorMap[m] || 'bg-gray-50 text-gray-600'}">${m}</span>
                                     <div class="flex-1 min-w-0">
                                         <div class="flex items-center gap-2">
                                             <span class="text-sm font-bold text-gray-900 truncate font-mono">${item.path}</span>
@@ -428,19 +432,16 @@
                                             <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">Parameters</span>
                                             <form id="form-${cIdx}-${eIdx}" onsubmit="executeRequest(event, ${cIdx}, ${eIdx}, '${m}', '${item.path}')" class="space-y-4">
                         `;
-
                         if (item.parameters) {
                             item.parameters.forEach(p => {
-                                const req = p.required ? '<span class="text-red-500 ml-1">*</span>' : '';
                                 html += `
                                     <div>
-                                        <label class="block text-[11px] font-bold text-gray-700 mb-2 uppercase tracking-tighter">${p.name}${req}</label>
+                                        <label class="block text-[11px] font-bold text-gray-700 mb-2 uppercase tracking-tighter">${p.name}${p.required ? '<span class="text-red-500 ml-1">*</span>' : ''}</label>
                                         <input type="text" name="${p.name}" class="w-full px-4 py-3 text-xs bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-0" placeholder="${p.description || ''}" ${p.required ? 'required' : ''}>
                                     </div>
                                 `;
                             });
                         }
-
                         if (item.requestBody && item.requestBody.content['multipart/form-data']) {
                             const props = item.requestBody.content['multipart/form-data'].schema.properties;
                             Object.keys(props).forEach(pk => {
@@ -453,7 +454,6 @@
                                 `;
                             });
                         }
-
                         html += `
                                             <button type="submit" class="mt-4 px-6 py-3 bg-black text-white text-[11px] font-bold rounded-xl hover:bg-gray-800 transition-all uppercase tracking-widest">Execute Request</button>
                                         </form>
@@ -463,7 +463,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         `;
                     });
                     html += '</div></div>';
