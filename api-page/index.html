@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Dokumentasi API modern dan antarmuka pengujian yang interaktif. Jelajahi berbagai endpoint API kami dengan mudah.">
+    <meta name="keywords" content="API, Dokumentasi API, REST API, Dinzo APIs, D2:业, Alat Pengembang">
+    <meta name="author" content="D2:业">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://api.dinzo.web.id">
+    <meta property="og:title" content="Dinzo APIs V1 - Dokumentasi API Modern">
+    <meta property="og:description" content="Jelajahi berbagai endpoint API kami dengan antarmuka yang modern dan mudah digunakan.">
+    <meta property="og:image" content="/src/banner.jpg">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://api.dinzo.web.id">
+    <meta property="twitter:title" content="Dinzo APIs V1 - Dokumentasi API Modern">
+    <meta property="twitter:description" content="Jelajahi berbagai endpoint API kami dengan antarmuka yang modern dan mudah digunakan.">
+    <meta property="twitter:image" content="/src/banner.jpg">
+    <link rel="icon" href="https://theresapis.vercel.app/src/icon.png" type="image/png">
+    <title id="page">Dinzo APIs V1.</title>
+
+    <script src="https://cdn.tailwindcss.com/"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Plus Jakarta Sans', 'sans-serif']
+                    },
+                    colors: {
+                        dinzo: {
+                            light: '#ffffff',
+                            grey: '#f8f9fa',
+                            darkgrey: '#e9ecef',
+                            text: '#2d3436',
+                            muted: '#636e72'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --bg: #ffffff;
+            --secondary: #f8f9fa;
+            --border: #edf2f7;
+            --accent: #1a1a1a;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: #2d3436;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d1d1d1;
+            border-radius: 10px;
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .smooth-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--border);
+        }
+
+        .smooth-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.04);
+            border-color: #cbd5e0;
+        }
+
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: opacity 0.6s ease;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.8;
+            letter-spacing: 1px;
+        }
+
+        .endpoint-badge {
+            background: var(--secondary);
+            border: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased">
+
+    <div id="loader">
+        <div class="flex flex-col items-center">
+            <div class="w-12 h-12 border-4 border-gray-200 border-t-black rounded-full animate-spin"></div>
+            <p class="mt-4 text-sm font-medium text-gray-500">Initializing Dinzo...</p>
+        </div>
+    </div>
+
+    <header class="fixed top-0 w-full z-50 glass-nav">
+        <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-xs">D</span>
+                </div>
+                <span class="font-bold text-lg tracking-tight">Dinzo <span class="text-gray-400 font-medium">Apis</span></span>
+            </div>
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
+                <a href="#features" class="hover:text-black transition-colors">Features</a>
+                <a href="https://github.com/Reyz2902" class="hover:text-black transition-colors">Repository</a>
+                <a href="https://t.me/ReyzID12" class="bg-black text-white px-4 py-2 rounded-full text-xs">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="pt-32 pb-20 px-6 max-w-5xl mx-auto">
+        <section class="text-center mb-20 reveal">
+            <span class="px-4 py-1.5 rounded-full bg-gray-100 text-[10px] font-bold uppercase tracking-widest text-gray-500">API Documentation v1.0</span>
+            <h1 class="text-5xl md:text-7xl font-bold mt-6 mb-6 tracking-tighter">Dinzo Apis.</h1>
+            <p class="text-gray-500 max-w-lg mx-auto text-sm md:text-base leading-relaxed">
+                Platform API minimalis dengan kecepatan tinggi untuk kebutuhan pengembangan aplikasi modern Anda.
+            </p>
+            <div class="mt-10 flex flex-wrap justify-center gap-4">
+                <a href="/docs" class="btn-primary text-white px-8 py-4 rounded-xl text-sm font-semibold shadow-xl flex items-center gap-2">
+                    <i class="fas fa-play text-[10px]"></i> Get Started
+                </a>
+                <a href="#features" class="bg-gray-100 text-black px-8 py-4 rounded-xl text-sm font-semibold hover:bg-gray-200 transition-all">
+                    Explore Features
+                </a>
+            </div>
+        </section>
+
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20 reveal">
+            <div class="bg-gray-50 p-8 rounded-3xl text-center border border-transparent hover:border-gray-200 transition-all">
+                <h3 id="total-endpoints" class="text-3xl font-bold">0</h3>
+                <p class="text-xs text-gray-400 mt-2 font-medium uppercase tracking-widest">Total Endpoints</p>
+            </div>
+            <div class="bg-gray-50 p-8 rounded-3xl text-center border border-transparent hover:border-gray-200 transition-all">
+                <h3 id="total-categories" class="text-3xl font-bold">0</h3>
+                <p class="text-xs text-gray-400 mt-2 font-medium uppercase tracking-widest">Unique Categories</p>
+            </div>
+            <div class="bg-gray-50 p-8 rounded-3xl text-center border border-transparent hover:border-gray-200 transition-all">
+                <h3 class="text-3xl font-bold">99.9%</h3>
+                <p class="text-xs text-gray-400 mt-2 font-medium uppercase tracking-widest">Uptime Rate</p>
+            </div>
+        </section>
+
+        <section id="features" class="space-y-4 mb-20 reveal">
+            <div class="flex items-end justify-between mb-8">
+                <div>
+                    <h2 class="text-2xl font-bold tracking-tight">Core Features</h2>
+                    <p class="text-sm text-gray-400 mt-1">Mengapa memilih layanan Dinzo Apis?</p>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="smooth-card p-6 rounded-2xl flex items-start gap-5">
+                    <div class="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center shrink-0">
+                        <i class="fas fa-bolt text-black"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm">Ultra Fast Performance</h4>
+                        <p class="text-xs text-gray-500 mt-1 leading-relaxed">Latency rendah di bawah 100ms untuk pengalaman pengguna yang instan.</p>
+                    </div>
+                </div>
+
+                <div class="smooth-card p-6 rounded-2xl flex items-start gap-5">
+                    <div class="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center shrink-0">
+                        <i class="fas fa-fingerprint text-black"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm">Secure Access</h4>
+                        <p class="text-xs text-gray-500 mt-1 leading-relaxed">Keamanan data berlapis untuk menjaga integritas setiap request.</p>
+                    </div>
+                </div>
+
+                <div class="smooth-card p-6 rounded-2xl flex items-start gap-5">
+                    <div class="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center shrink-0">
+                        <i class="fas fa-layer-group text-black"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm">Scalable Infrastructure</h4>
+                        <p class="text-xs text-gray-500 mt-1 leading-relaxed">Siap menangani ribuan trafik tanpa kendala teknis berarti.</p>
+                    </div>
+                </div>
+
+                <div class="smooth-card p-6 rounded-2xl flex items-start gap-5">
+                    <div class="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center shrink-0">
+                        <i class="fas fa-headset text-black"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm">24/7 Monitoring</h4>
+                        <p class="text-xs text-gray-500 mt-1 leading-relaxed">Sistem kami dipantau secara berkala untuk menjamin stabilitas.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="pt-20 border-t border-gray-100 reveal">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="text-center md:text-left">
+                    <p class="text-sm font-bold tracking-tight">Dinzo Apis</p>
+                    <p class="text-[10px] text-gray-400 mt-1 font-medium tracking-widest uppercase">© <span id="year"></span> All Rights Reserved</p>
+                </div>
+                <div class="flex gap-6 text-xs font-medium text-gray-400">
+                    <a href="/legal" class="hover:text-black transition-colors">Privacy</a>
+                    <a href="/legal" class="hover:text-black transition-colors">Terms</a>
+                    <a href="/docs" class="hover:text-black transition-colors">Docs</a>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 600);
+            }, 800);
+
+            document.getElementById("year").textContent = new Date().getFullYear();
+
+            const reveals = document.querySelectorAll('.reveal');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            reveals.forEach(el => observer.observe(el));
+
+            async function fetchData() {
+                try {
+                    const response = await fetch('/src/openapi.json');
+                    const data = await response.json();
+                    
+                    const endpointsCount = Object.keys(data.paths || {}).length;
+                    const categoriesCount = new Set((data.tags || []).map(tag => tag.name)).size;
+
+                    document.getElementById('total-endpoints').innerText = endpointsCount;
+                    document.getElementById('total-categories').innerText = categoriesCount;
+                } catch (e) {
+                    document.getElementById('total-endpoints').innerText = '100+';
+                    document.getElementById('total-categories').innerText = '15+';
+                }
+            }
+            fetchData();
+        });
+    </script>
+</body>
+</html>
