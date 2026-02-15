@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal - Dinzo Apis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: { extend: { fontFamily: { 'sans': ['Plus Jakarta Sans', 'sans-serif'] } } }
+        }
+    </script>
+    <style>
+        body { background-color: #fcfcfc; color: #1a1a1a; }
+        .glass-header { backdrop-filter: blur(12px); background: rgba(255, 255, 255, 0.8); border-bottom: 1px solid #eee; }
+        .card-shadow { box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05); }
+        .legal-content h3 { font-weight: 800; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 1.5rem; margin-bottom: 0.5rem; color: #000; }
+        .legal-content p { font-size: 0.875rem; line-height: 1.6; color: #666; margin-bottom: 1rem; }
+        .tab-active { border-bottom: 2px solid #000; color: #000 !important; }
+    </style>
+</head>
+<body class="font-sans antialiased">
+
+    <header class="glass-header sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <a href="/" class="w-10 h-10 bg-black rounded-xl flex items-center justify-center shadow-lg shadow-black/10">
+                    <span class="text-white font-black text-xl">D</span>
+                </a>
+                <div>
+                    <h1 class="text-base font-bold tracking-tight text-gray-900">Legal Center</h1>
+                    <p class="text-[10px] font-medium text-gray-500 uppercase tracking-widest">Policies & Agreements</p>
+                </div>
+            </div>
+            <a href="/" class="text-xs font-bold uppercase tracking-widest hover:text-gray-500 transition-colors">Back to API</a>
+        </div>
+    </header>
+
+    <main class="max-w-3xl mx-auto px-6 py-12">
+        <div class="flex border-b border-gray-100 mb-8">
+            <button onclick="switchTab('terms')" id="btn-terms" class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-gray-400 transition-all tab-active">Terms of Service</button>
+            <button onclick="switchTab('privacy')" id="btn-privacy" class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-gray-400 transition-all">Privacy Policy</button>
+        </div>
+
+        <div id="terms" class="legal-content animate-up">
+            <div class="bg-white border border-gray-100 rounded-3xl p-8 card-shadow">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-2 h-8 bg-black rounded-full"></div>
+                    <h2 class="text-xl font-extrabold tracking-tight">Terms of Service</h2>
+                </div>
+                
+                <h3>1. Acceptance of Terms</h3>
+                <p>By accessing and using Dinzo Apis, you acknowledge that you have read, understood, and agree to be bound by these terms. If you do not agree, please refrain from using our services.</p>
+
+                <h3>2. Usage License</h3>
+                <p>We grant you a limited, non-exclusive, non-transferable license to use our APIs for personal or commercial development purposes, provided you comply with all usage limits and documentation guidelines.</p>
+
+                <h3>3. Prohibited Conduct</h3>
+                <p>You agree not to: 
+                    <br>• Attempt to reverse engineer or bypass API security measures.
+                    <br>• Use the service for illegal activities or spamming.
+                    <br>• Exceed the rate limits intentionally to disrupt the service.
+                </p>
+
+                <h3>4. Disclaimer of Warranty</h3>
+                <p>Dinzo Apis is provided "as is". We make no warranties regarding the uptime, accuracy, or reliability of the data provided through our endpoints.</p>
+
+                <h3>5. Limitation of Liability</h3>
+                <p>Dinzo Network shall not be liable for any indirect, incidental, or consequential damages resulting from the use or inability to use our API services.</p>
+                
+                <div class="mt-8 pt-6 border-t border-gray-50">
+                    <p class="text-[10px] font-bold text-gray-400">LAST UPDATED: FEBRUARY 2026</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="privacy" class="legal-content hidden animate-up">
+            <div class="bg-white border border-gray-100 rounded-3xl p-8 card-shadow">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-2 h-8 bg-blue-500 rounded-full"></div>
+                    <h2 class="text-xl font-extrabold tracking-tight">Privacy Policy</h2>
+                </div>
+
+                <h3>1. Information We Collect</h3>
+                <p>We collect minimal information required to provide our services, including IP addresses for rate limiting, browser types for optimization, and basic usage logs to improve API performance.</p>
+
+                <h3>2. Data Usage</h3>
+                <p>The collected data is used solely for technical maintenance, preventing abuse, and analyzing service performance. We do not sell your data to third parties.</p>
+
+                <h3>3. Cookies & Tracking</h3>
+                <p>We use essential cookies to maintain your session and security. We do not use persistent tracking cookies for advertising purposes.</p>
+
+                <h3>4. Third-Party Links</h3>
+                <p>Our documentation may contain links to external sites (e.g., WhatsApp). We are not responsible for the privacy practices of those third-party platforms.</p>
+
+                <h3>5. Security</h3>
+                <p>We implement industry-standard security measures to protect your data. However, no method of transmission over the internet is 100% secure.</p>
+
+                <div class="mt-8 pt-6 border-t border-gray-50">
+                    <p class="text-[10px] font-bold text-gray-400">LAST UPDATED: FEBRUARY 2026</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function switchTab(tab) {
+            const terms = document.getElementById('terms');
+            const privacy = document.getElementById('privacy');
+            const btnTerms = document.getElementById('btn-terms');
+            const btnPrivacy = document.getElementById('btn-privacy');
+
+            if (tab === 'terms') {
+                terms.classList.remove('hidden');
+                privacy.classList.add('hidden');
+                btnTerms.classList.add('tab-active');
+                btnPrivacy.classList.remove('tab-active');
+            } else {
+                privacy.classList.remove('hidden');
+                terms.classList.add('hidden');
+                btnPrivacy.classList.add('tab-active');
+                btnTerms.classList.remove('tab-active');
+            }
+        }
+    </script>
+</body>
+</html>
